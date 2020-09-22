@@ -16,10 +16,10 @@ except Exception as e:
 
 setup(
     name="djangowebsocket",
-    version="0.0.1",
+    version="1.0.0",
     author="ahri",
     author_email="ahriknow@gmail.com",
-    description="html text parser,get the content form html page",
+    description="pip python django3 websocket",
     keywords=("pip", "python", "django", "websocket"),
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -43,5 +43,6 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "License :: OSI Approved :: MIT License",
     ],
 )

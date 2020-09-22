@@ -1,3 +1,5 @@
+from .middleware import MIDDLEWARE
+from .request import Request
 from .response import Response
 
 
@@ -5,8 +7,11 @@ class BaseWebSocketView:
     """
     WebSocket 基础视图类
     """
-    # 连接客户端
-    clients = {}
+    def __init__(self, scope, send, clients):
+        self.request = Request(scope)
+        self.send = send
+        clients.set([self.request, send])
+        self.clients = clients
 
     def websocket(self, request) -> Response:
         """
@@ -14,19 +19,27 @@ class BaseWebSocketView:
         """
         return Response('', 'websocket.send')
 
-    async def receive(self, receive, send):
+    async def receive(self, receive):
         """
         处理请求类型的方法，接受客户端的消息时将调用 websocket 方法
         :param receive: 请求 receive
-        :param send: 请求 send
         """
         while True:
             event = await receive()
             event_type = event.get('type')
             if event_type == 'websocket.connect':
-                await send({'type': 'websocket.accept'})
+                await self.send({'type': 'websocket.accept'})
             elif event_type == 'websocket.disconnect':
-                await send({'type': 'websocket.close'})
+                break
             else:
-                response = self.websocket(event.get('text'))
-                await send({'type': response.websocket_type, 'text': response.data})
+                before = []
+                after = []
+                for i in MIDDLEWARE:
+                    before.append(i().process_request)
+                    after.append(i().process_response)
+                for i in before:
+                    self.request = i(self.request)
+                response = self.websocket(self.request)
+                for i in after[::-1]:
+                    response = i(self.request, response)
+                await self.send({'type': response.websocket_type, 'text': response.data})
