@@ -13,7 +13,8 @@ class Request:
         try:
             for i in self.to_string(scope.get('query_string', b'')).split('&'):
                 tmp = i.split('=')
-                self.QUERY[tmp[0]] = tmp[1]
+                if len(tmp) > 1:
+                    self.QUERY[tmp[0]] = tmp[1]
         except Exception as ex:
             raise Exception('Analysis query_string error: ' + str(ex))
         try:

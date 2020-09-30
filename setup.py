@@ -16,7 +16,7 @@ except Exception as e:
 
 setup(
     name="djangowebsocket",
-    version="1.0.0",
+    version="1.0.1",
     author="ahri",
     author_email="ahriknow@gmail.com",
     description="pip python django3 websocket",

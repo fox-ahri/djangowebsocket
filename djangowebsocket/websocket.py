@@ -32,6 +32,7 @@ class BaseWebSocketView:
             elif event_type == 'websocket.disconnect':
                 break
             else:
+                self.request.data = event.get('text')
                 before = []
                 after = []
                 for i in MIDDLEWARE:

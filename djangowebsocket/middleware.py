@@ -24,3 +24,12 @@ def middleware(mw):
     :param mw: 中间件类
     """
     MIDDLEWARE.append(mw)
+
+
+def middlewares(mws):
+    """
+    注册中间件
+    :param mws: 中间件类列表
+    """
+    for i in mws:
+        MIDDLEWARE.append(i)
